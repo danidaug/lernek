@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-blink-controls@2.2.0/dist/aframe-blink-controls.min.js"></script>
     <title>Document</title>
 </head>
     <body>
@@ -16,8 +16,14 @@
             <a-cylinder position="0 0 0" rotation="200 180 90" radius="0.1" height="2.5" color="#BAD3FF" material="opacity:1;"></a-cylinder>
 
             <a-sky color="#0A0F17"></a-sky>
-            <a-entity id="rig" position="0 0 0">
-                <a-camera id="camera" look-controls wasd-controls="acceleration: 100"></a-camera>
+            <a-entity id="rig">
+                <a-camera></a-camera>
+
+                <a-entity laser-controls="hand: left" 
+                        blink-controls="cameraRig: #rig; teleportOrigin: a-camera; collisionEntities: .suelo; curveStyle: curved">
+                </a-entity>
+
+                <a-entity laser-controls="hand: right"></a-entity>
             </a-entity>
         </a-scene>
   </body>
