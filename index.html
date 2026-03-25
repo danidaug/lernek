@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Estación Minera Estilo Low-Poly</title>
+    <title>Estación Minera - Modo Móvil (Giroscopio)</title>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
   </head>
@@ -12,49 +12,35 @@
       <a-sky color="#110e0a"></a-sky>
 
       <a-entity id="nucleo" position="0 0 0">
-        <a-sphere radius="2.5" color="#ffffff" material="opacity: 0.3; transparent: true; wireframe: false" segments-height="18" segments-width="18"></a-sphere>
+        <a-sphere radius="2.5" color="#ffffff" material="opacity: 0.3; transparent: true; wireframe: false"></a-sphere>
         
         <a-box width="1" height="3" depth="1" color="#222" position="-0.5 0 0"></a-box>
         <a-box width="0.8" height="4" depth="0.8" color="#333" position="0.5 0.5 0.5"></a-box>
         <a-box width="1.2" height="2" depth="1.2" color="#111" position="0 -0.5 -0.5"></a-box>
-
         <a-text value="ZZZZ" color="#ffaa00" align="center" position="0 1.5 1.5" width="12" material="shader: flat;"></a-text>
       </a-entity>
 
       <a-entity id="brazos">
         <a-cylinder radius="0.15" height="12" color="#222" position="0 6 0"></a-cylinder>
         <a-cylinder radius="0.05" height="10" color="#ff9900" position="0 6 0" material="shader: flat;"></a-cylinder>
-
         <a-cylinder radius="0.15" height="12" color="#222" position="0 -6 0"></a-cylinder>
         <a-cylinder radius="0.05" height="10" color="#ff9900" position="0 -6 0" material="shader: flat;"></a-cylinder>
-
         <a-cylinder radius="0.15" height="12" color="#222" position="-6 0 0" rotation="0 0 90"></a-cylinder>
         <a-cylinder radius="0.05" height="10" color="#ff9900" position="-6 0 0" rotation="0 0 90" material="shader: flat;"></a-cylinder>
         <a-box width="0.8" height="0.4" depth="0.4" color="#ff0000" position="-3 0 0" material="shader: flat;"></a-box>
-
         <a-cylinder radius="0.15" height="12" color="#222" position="6 0 0" rotation="0 0 90"></a-cylinder>
         <a-cylinder radius="0.05" height="10" color="#ff9900" position="6 0 0" rotation="0 0 90" material="shader: flat;"></a-cylinder>
         <a-box width="0.8" height="0.4" depth="0.4" color="#ff0000" position="3 0 0" material="shader: flat;"></a-box>
-
         <a-cylinder radius="0.15" height="12" color="#222" position="4.2 4.2 0" rotation="0 0 45"></a-cylinder>
-        <a-cylinder radius="0.05" height="10" color="#ff9900" position="4.2 4.2 0" rotation="0 0 45" material="shader: flat;"></a-cylinder>
-
         <a-cylinder radius="0.15" height="12" color="#222" position="-4.2 -4.2 0" rotation="0 0 45"></a-cylinder>
-        <a-cylinder radius="0.05" height="10" color="#ff9900" position="-4.2 -4.2 0" rotation="0 0 45" material="shader: flat;"></a-cylinder>
-
         <a-cylinder radius="0.15" height="12" color="#222" position="-4.2 4.2 0" rotation="0 0 -45"></a-cylinder>
-        <a-cylinder radius="0.05" height="10" color="#ff9900" position="-4.2 4.2 0" rotation="0 0 -45" material="shader: flat;"></a-cylinder>
-
         <a-cylinder radius="0.15" height="12" color="#222" position="4.2 -4.2 0" rotation="0 0 -45"></a-cylinder>
-        <a-cylinder radius="0.05" height="10" color="#ff9900" position="4.2 -4.2 0" rotation="0 0 -45" material="shader: flat;"></a-cylinder>
       </a-entity>
 
-      <a-light type="ambient" color="#ffffff" intensity="0.8"></a-light>
+      <a-light type="ambient" color="#ffffff" intensity="0.9"></a-light>
 
-      <a-entity id="rig" movement-controls="controls: gamepad, wasd; speed: 0.2" position="0 0 8">
-        <a-camera id="camera" look-controls></a-camera>
-        <a-entity oculus-touch-controls="hand: left"></a-entity>
-        <a-entity oculus-touch-controls="hand: right"></a-entity>
+      <a-entity id="rig" movement-controls="controls: touch, wasd; speed: 0.1" position="0 0 8">
+        <a-camera id="camera" look-controls="magicWindowTrackingEnabled: true; pointerLockEnabled: false;"></a-camera>
       </a-entity>
 
     </a-scene>
