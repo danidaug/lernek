@@ -1,27 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Estación Minera Ultra-Realista - A-Frame</title>
+    
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
-    <title>Document</title>
-</head>
-    <body>
-        <a-scene>
-            <a-sphere position="0 0 0" radius="1.25" color="#BAD3FF" material="opacity:0.3;"></a-sphere>
-            <a-sphere position="0 0 0" radius="0.4" color="#BAD3FF" material="opacity:1;"></a-sphere>
-            <a-cylinder position="0 0 0" rotation="0 90 90" radius="0.1" height="2.5" color="#BAD3FF" material="opacity:1;"></a-cylinder>
-            <a-cylinder position="0 0 0" rotation="0 90 0" radius="0.1" height="2.5" color="#BAD3FF" material="opacity:1;"></a-cylinder>
-            <a-cylinder position="0 0 0" rotation="200 180 90" radius="0.1" height="2.5" color="#BAD3FF" material="opacity:1;"></a-cylinder>
-            <a-plane class="suelo" position="0 0 0" rotation="-90 0 0" width="20" height="20" color="#7BC8A4"></a-plane>
-            <a-sky color="#0A0F17"></a-sky>
-            <a-entity id="rig" movement-controls="controls: gamepad; speed: 0.1">
-                <a-camera look-controls></a-camera>
-                
-                <a-entity oculus-touch-controls="hand: left"></a-entity>
-                <a-entity oculus-touch-controls="hand: right"></a-entity>
-            </a-entity>
-        </a-scene>
+    
+    <script>
+      AFRAME.registerComponent('dust-particles', {
+        init: function () {
+          for (let i = 0; i < 200; i++) {
+            let particle = document.createElement('a-image');
+            particle.setAttribute('src', '#texturaPolvo');
+            particle.setAttribute('material', {transparent: true, opacity: 0.1, shader: 'flat'});
+            particle.setAttribute('scale', {x: 2 + Math.random()*3, y: 2 + Math.random()*3, z: 2 + Math.random()*3});
+            
+            // Posición aleatoria en un volumen
+            let pos = {
+              x: (Math.random() - 0.5) * 20,
+              y: (Math.random() - 0.5) * 20,
+              z: (Math.random() - 0.5) * 20
+            };
+            particle.setAttribute('position', pos);
+            
+            // Animación suave de flotación
+            particle.setAttribute('animation__float', {
+              property: 'position',
+              to: `${pos.x + (Math.random()-0.5)*2} ${pos.y + (Math.random()-0.5)*2} ${pos.z + (Math.random()-0.5)*2}`,
+              dur: 15000 + Math.random()*20000,
+              dir: 'alternate',
+              loop: true,
+              easing: 'linear'
+            });
+            this.el.appendChild(particle);
+          }
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene fog="type: exponential; color: #6e583d; density: 0.04" renderer="antialias: true; colorManagement: true; physicallyCorrectLights: true;">
+      
+      <a-assets>
+        <a-asset-item id="modeloCueva" src="cueva_realista.glb"></a-asset-item>
+        
+        <img id="texturaPolvo" src="polvo.png">
+        
+        <img id="texMetal" src="https://cdn.aframe.io/examples/ar/moon-texture.jpg">
+      </a-assets>
+
+      <a-entity gltf-model="#modeloCueva" position="0 -10 0" scale="2 2 2" material="roughness: 1; metalness: 0;"></a-entity>
+      <a-entity gltf-model="#modeloCueva" position="0 10 0" rotation="180 0 0" scale="2 2 2" material="roughness: 1; metalness: 0;"></a-entity>
+      <a-entity gltf-model="#modeloCueva" position="-10 0 0" rotation="0 90 0" scale="2 2 2" material="roughness: 1; metalness: 0;"></a-entity>
+      <a-entity gltf-model="#modeloCueva" position="10 0 0" rotation="0 -90 0" scale="2 2 2" material="roughness: 1; metalness: 0;"></a-entity>
+
+      <a-entity id="estacionCentral" position="0 0 0">
+        <a-sphere radius="2.5" material="color: #ffffff; opacity: 0.15; transparent: true; metalness: 0.8; roughness: 0.05; sphericalEnvMap: #texMetal;"></a-sphere>
+        
+        <a-entity id="microCiudad" scale="0.1 0.1 0.1" material="metalness: 0.8; roughness: 0.2;">
+          <a-box width="3" height="15" depth="3" color="#111" position="-2 7 0" material="metalness: 1; roughness: 0.1;"></a-box>
+          <a-box width="2" height="10" depth="2" color="#000" position="2 4 1" material="metalness: 1; roughness: 0.1;"></a-box>
+          <a-box width="5" height="5" depth="5" color="#222" position="0 2 0" material="metalness: 1; roughness: 0.1;"></a-box>
+          <a-cylinder radius="0.4" height="20" color="#111" position="0 10 0"></a-cylinder>
+
+          <a-light type="point" color="#ff4400" intensity="1.5" distance="10" position="0 10 0"></a-light>
+          
+          <a-text value="ZZZZ" color="#ffaa00" align="center" position="0 12 1.2" width="20" material="shader: flat; emissive: #ffaa00; emissiveIntensity: 2;"></a-text>
+          <a-text value="ZZZZ" color="#ffaa00" align="center" position="0 12 -1.2" width="20" rotation="0 180 0" material="shader: flat; emissive: #ffaa00; emissiveIntensity: 2;"></a-text>
+        </a-entity>
+      </a-entity>
+
+      <a-entity id="radiosMineros">
+        <script>
+          const numBrazos = 8;
+          const longitudBrazo = 14;
+          for (let i = 0; i < numBrazos; i++) {
+            const angulo = (360 / numBrazos) * i;
+            let brazoContainer = document.createElement('a-entity');
+            brazoContainer.setAttribute('rotation', `${angulo} 90 0`);
+            
+            // Estructura de celosía del brazo (más detallada)
+            let brazoEstructura = document.createElement('a-entity');
+            brazoEstructura.setAttribute('geometry', {primitive: 'box', width: 0.3, height: longitudBrazo, depth: 0.3});
+            brazoEstructura.setAttribute('position', `0 ${-longitudBrazo/2} 0`);
+            brazoEstructura.setAttribute('material', {color: '#1a1a1a', metalness: 0.9, roughness: 0.1, src: '#texMetal'});
+
+            // Soporte transversal
+            let soporteTransversal = document.createElement('a-entity');
+            soporteTransversal.setAttribute('geometry', {primitive: 'torus', radius: 1, radiusTubular: 0.05, arc: 360});
+            soporteTransversal.setAttribute('position', '0 -3 0');
+            soporteTransversal.setAttribute('rotation', '90 0 0');
+            soporteTransversal.setAttribute('material', {color: '#1a1a1a', metalness: 1, roughness: 0.2});
+            brazoEstructura.appendChild(soporteTransversal);
+
+            // Las luces amarillas del brazo (más realistas, con bloom-effect simulado)
+            let luzLarga = document.createElement('a-cylinder');
+            luzLarga.setAttribute('radius', 0.08);
+            luzLarga.setAttribute('height', longitudBrazo - 4);
+            luzLarga.setAttribute('material', {shader: 'flat', color: '#ffcc00', emissive: '#ffaa00', emissiveIntensity: 1});
+            luzLarga.setAttribute('position', `0 ${-longitudBrazo/2} 0`);
+            
+            // Luz puntual real que proyecta sombra
+            let luzPuntual = document.createElement('a-light');
+            luzPuntual.setAttribute('type', 'point');
+            luzPuntual.setAttribute('color', '#ffaa00');
+            luzPuntual.setAttribute('intensity', 0.5);
+            luzPuntual.setAttribute('distance', longitudBrazo);
+            luzPuntual.setAttribute('position', `0 ${-longitudBrazo/2} 0`);
+
+            // Los acentos rojos (horizontal)
+            if (i === 2 || i === 6) {
+                let acentoRojo = document.createElement('a-box');
+                acentoRojo.setAttribute('width', 1.2); acentoRojo.setAttribute('height', 0.4); acentoRojo.setAttribute('depth', 0.4);
+                acentoRojo.setAttribute('material', {shader: 'flat', color: '#ff1111', emissive: '#ff1111', emissiveIntensity: 2}); acentoRojo.setAttribute('position', '0 -1.5 0');
+                brazoContainer.appendChild(acentoRojo);
+            }
+
+            brazoContainer.appendChild(brazoEstructura);
+            brazoContainer.appendChild(luzLarga);
+            brazoContainer.appendChild(luzPuntual);
+            
+            document.querySelector('#radiosMineros').appendChild(brazoContainer);
+          }
+        </script>
+      </a-entity>
+
+      <a-light type="ambient" color="#3d2c1c" intensity="0.5"></a-light>
+      <a-light type="point" position="0 -12 0" color="#fff7e0" intensity="2" distance="20" castShadow="true"></a-light>
+      
+      <a-entity dust-particles></a-entity>
+
+      <a-entity id="rig" movement-controls="controls: gamepad, wasd; speed: 0.12" position="0 1.6 8">
+        <a-camera id="camera" look-controls>
+          <a-cursor fuse="true" timeout="1000" color="#fff" nav-cursor></a-cursor>
+        </a-camera>
+        <a-entity oculus-touch-controls="hand: left"></a-entity>
+        <a-entity oculus-touch-controls="hand: right"></a-entity>
+      </a-entity>
+
+    </a-scene>
   </body>
 </html>
