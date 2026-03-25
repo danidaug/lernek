@@ -2,112 +2,56 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Estación Minera Ultra-Optimizado</title>
+    <title>Estación Minera Estilo Low-Poly</title>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
-    
-    <script>
-      // Componente para generar partículas de polvo flotantes sin imágenes externas
-      AFRAME.registerComponent('dust-particles', {
-        init: function () {
-          for (let i = 0; i < 150; i++) {
-            let particle = document.createElement('a-sphere');
-            particle.setAttribute('radius', Math.random() * 0.05 + 0.02);
-            particle.setAttribute('color', '#ffcc66');
-            particle.setAttribute('material', {shader: 'flat', opacity: Math.random() * 0.4 + 0.1, transparent: true});
-            
-            let pos = {
-              x: (Math.random() - 0.5) * 25,
-              y: (Math.random() - 0.5) * 25,
-              z: (Math.random() - 0.5) * 25
-            };
-            particle.setAttribute('position', pos);
-            
-            particle.setAttribute('animation', {
-              property: 'position',
-              to: `${pos.x + (Math.random()-0.5)*3} ${pos.y + (Math.random()-0.5)*3} ${pos.z + (Math.random()-0.5)*3}`,
-              dur: 10000 + Math.random() * 10000,
-              dir: 'alternate',
-              loop: true,
-              easing: 'easeInOutQuad'
-            });
-            this.el.appendChild(particle);
-          }
-        }
-      });
-    </script>
   </head>
   <body>
-    <a-scene fog="type: exponential; color: #2b1f14; density: 0.06" renderer="antialias: true; colorManagement: true;">
+    <a-scene renderer="antialias: false; colorManagement: false;">
 
-      <a-assets>
-        <img id="rugoso" src="https://cdn.aframe.io/examples/ar/moon-texture.jpg">
-      </a-assets>
-
-      <a-entity id="paredesCueva">
-        <a-torus radius="15" radius-tubular="8" segments-tubular="12" segments-radial="12" 
-                 material="src: #rugoso; color: #543b25; roughness: 1; metalness: 0; side: back" rotation="90 0 0"></a-torus>
-        <a-torus radius="15" radius-tubular="8" segments-tubular="12" segments-radial="12" 
-                 material="src: #rugoso; color: #402a18; roughness: 1; metalness: 0; side: back" rotation="0 90 0"></a-torus>
-      </a-entity>
-
-      <a-light type="ambient" color="#3a2312" intensity="0.5"></a-light>
-      <a-light type="directional" position="0 15 0" target="#nucleo" color="#ffd27f" intensity="2.5"></a-light>
-      <a-light type="point" position="0 -12 0" color="#ffffff" intensity="3" distance="25"></a-light>
+      <a-sky color="#110e0a"></a-sky>
 
       <a-entity id="nucleo" position="0 0 0">
-        <a-sphere radius="2.5" material="color: #ffffff; opacity: 0.2; transparent: true; metalness: 0.9; roughness: 0.1"></a-sphere>
+        <a-sphere radius="2.5" color="#ffffff" material="opacity: 0.3; transparent: true; wireframe: false" segments-height="18" segments-width="18"></a-sphere>
         
-        <a-entity scale="0.1 0.1 0.1">
-          <a-box width="6" height="18" depth="6" color="#0a0a0a" position="-2.5 9 1" material="roughness: 0.5"></a-box>
-          <a-box width="4.5" height="14" depth="4.5" color="#141414" position="3 7 -2" material="roughness: 0.5"></a-box>
-          <a-cylinder radius="2.5" height="22" color="#050505" position="0 11 0" material="roughness: 0.3"></a-cylinder>
-          
-          <a-text value="ZZZZ" color="#ffcc00" align="center" position="0 14 3" width="25" material="shader: flat;"></a-text>
-          <a-text value="ZZZZ" color="#ffcc00" align="center" position="0 14 -3" width="25" rotation="0 180 0" material="shader: flat;"></a-text>
-        </a-entity>
+        <a-box width="1" height="3" depth="1" color="#222" position="-0.5 0 0"></a-box>
+        <a-box width="0.8" height="4" depth="0.8" color="#333" position="0.5 0.5 0.5"></a-box>
+        <a-box width="1.2" height="2" depth="1.2" color="#111" position="0 -0.5 -0.5"></a-box>
+
+        <a-text value="ZZZZ" color="#ffaa00" align="center" position="0 1.5 1.5" width="12" material="shader: flat;"></a-text>
       </a-entity>
 
-      <a-entity id="radiosMineros">
-        <script>
-          const numBrazos = 8;
-          const longitudBrazo = 16;
-          for (let i = 0; i < numBrazos; i++) {
-            const angulo = (360 / numBrazos) * i;
-            let brazoContainer = document.createElement('a-entity');
-            brazoContainer.setAttribute('rotation', `${angulo} 90 0`);
-            
-            // Vigas de metal oscuro
-            let viga = document.createElement('a-box');
-            viga.setAttribute('width', 0.4); viga.setAttribute('height', longitudBrazo); viga.setAttribute('depth', 0.4);
-            viga.setAttribute('position', `0 ${-longitudBrazo/2} 0`);
-            viga.setAttribute('material', {color: '#1a1a1a', metalness: 0.8, roughness: 0.3});
-            
-            // Neon amarillo central
-            let neon = document.createElement('a-cylinder');
-            neon.setAttribute('radius', 0.08); neon.setAttribute('height', longitudBrazo - 2);
-            neon.setAttribute('position', `0 ${-longitudBrazo/2} 0`);
-            neon.setAttribute('material', {shader: 'flat', color: '#ffaa00'});
+      <a-entity id="brazos">
+        <a-cylinder radius="0.15" height="12" color="#222" position="0 6 0"></a-cylinder>
+        <a-cylinder radius="0.05" height="10" color="#ff9900" position="0 6 0" material="shader: flat;"></a-cylinder>
 
-            // Placas rojas de advertencia en los brazos horizontales
-            if (i === 2 || i === 6) {
-              let placaRoja = document.createElement('a-box');
-              placaRoja.setAttribute('width', 1.2); placaRoja.setAttribute('height', 0.5); placaRoja.setAttribute('depth', 0.5);
-              placaRoja.setAttribute('position', '0 -3 0');
-              placaRoja.setAttribute('material', {shader: 'flat', color: '#ff2222'});
-              brazoContainer.appendChild(placaRoja);
-            }
+        <a-cylinder radius="0.15" height="12" color="#222" position="0 -6 0"></a-cylinder>
+        <a-cylinder radius="0.05" height="10" color="#ff9900" position="0 -6 0" material="shader: flat;"></a-cylinder>
 
-            brazoContainer.appendChild(viga);
-            brazoContainer.appendChild(neon);
-            document.querySelector('#radiosMineros').appendChild(brazoContainer);
-          }
-        </script>
+        <a-cylinder radius="0.15" height="12" color="#222" position="-6 0 0" rotation="0 0 90"></a-cylinder>
+        <a-cylinder radius="0.05" height="10" color="#ff9900" position="-6 0 0" rotation="0 0 90" material="shader: flat;"></a-cylinder>
+        <a-box width="0.8" height="0.4" depth="0.4" color="#ff0000" position="-3 0 0" material="shader: flat;"></a-box>
+
+        <a-cylinder radius="0.15" height="12" color="#222" position="6 0 0" rotation="0 0 90"></a-cylinder>
+        <a-cylinder radius="0.05" height="10" color="#ff9900" position="6 0 0" rotation="0 0 90" material="shader: flat;"></a-cylinder>
+        <a-box width="0.8" height="0.4" depth="0.4" color="#ff0000" position="3 0 0" material="shader: flat;"></a-box>
+
+        <a-cylinder radius="0.15" height="12" color="#222" position="4.2 4.2 0" rotation="0 0 45"></a-cylinder>
+        <a-cylinder radius="0.05" height="10" color="#ff9900" position="4.2 4.2 0" rotation="0 0 45" material="shader: flat;"></a-cylinder>
+
+        <a-cylinder radius="0.15" height="12" color="#222" position="-4.2 -4.2 0" rotation="0 0 45"></a-cylinder>
+        <a-cylinder radius="0.05" height="10" color="#ff9900" position="-4.2 -4.2 0" rotation="0 0 45" material="shader: flat;"></a-cylinder>
+
+        <a-cylinder radius="0.15" height="12" color="#222" position="-4.2 4.2 0" rotation="0 0 -45"></a-cylinder>
+        <a-cylinder radius="0.05" height="10" color="#ff9900" position="-4.2 4.2 0" rotation="0 0 -45" material="shader: flat;"></a-cylinder>
+
+        <a-cylinder radius="0.15" height="12" color="#222" position="4.2 -4.2 0" rotation="0 0 -45"></a-cylinder>
+        <a-cylinder radius="0.05" height="10" color="#ff9900" position="4.2 -4.2 0" rotation="0 0 -45" material="shader: flat;"></a-cylinder>
       </a-entity>
 
-      <a-entity dust-particles></a-entity>
+      <a-light type="ambient" color="#ffffff" intensity="0.8"></a-light>
 
-      <a-entity id="rig" movement-controls="controls: gamepad, wasd; speed: 0.15" position="0 0 9">
+      <a-entity id="rig" movement-controls="controls: gamepad, wasd; speed: 0.2" position="0 0 8">
         <a-camera id="camera" look-controls></a-camera>
         <a-entity oculus-touch-controls="hand: left"></a-entity>
         <a-entity oculus-touch-controls="hand: right"></a-entity>
