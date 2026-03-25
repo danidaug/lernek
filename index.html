@@ -2,36 +2,34 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Estación Minera Ultra-Realista - A-Frame</title>
-    
+    <title>Estación Minera Ultra-Optimizado</title>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
     
     <script>
+      // Componente para generar partículas de polvo flotantes sin imágenes externas
       AFRAME.registerComponent('dust-particles', {
         init: function () {
-          for (let i = 0; i < 200; i++) {
-            let particle = document.createElement('a-image');
-            particle.setAttribute('src', '#texturaPolvo');
-            particle.setAttribute('material', {transparent: true, opacity: 0.1, shader: 'flat'});
-            particle.setAttribute('scale', {x: 2 + Math.random()*3, y: 2 + Math.random()*3, z: 2 + Math.random()*3});
+          for (let i = 0; i < 150; i++) {
+            let particle = document.createElement('a-sphere');
+            particle.setAttribute('radius', Math.random() * 0.05 + 0.02);
+            particle.setAttribute('color', '#ffcc66');
+            particle.setAttribute('material', {shader: 'flat', opacity: Math.random() * 0.4 + 0.1, transparent: true});
             
-            // Posición aleatoria en un volumen
             let pos = {
-              x: (Math.random() - 0.5) * 20,
-              y: (Math.random() - 0.5) * 20,
-              z: (Math.random() - 0.5) * 20
+              x: (Math.random() - 0.5) * 25,
+              y: (Math.random() - 0.5) * 25,
+              z: (Math.random() - 0.5) * 25
             };
             particle.setAttribute('position', pos);
             
-            // Animación suave de flotación
-            particle.setAttribute('animation__float', {
+            particle.setAttribute('animation', {
               property: 'position',
-              to: `${pos.x + (Math.random()-0.5)*2} ${pos.y + (Math.random()-0.5)*2} ${pos.z + (Math.random()-0.5)*2}`,
-              dur: 15000 + Math.random()*20000,
+              to: `${pos.x + (Math.random()-0.5)*3} ${pos.y + (Math.random()-0.5)*3} ${pos.z + (Math.random()-0.5)*3}`,
+              dur: 10000 + Math.random() * 10000,
               dir: 'alternate',
               loop: true,
-              easing: 'linear'
+              easing: 'easeInOutQuad'
             });
             this.el.appendChild(particle);
           }
@@ -40,101 +38,77 @@
     </script>
   </head>
   <body>
-    <a-scene fog="type: exponential; color: #6e583d; density: 0.04" renderer="antialias: true; colorManagement: true; physicallyCorrectLights: true;">
-      
+    <a-scene fog="type: exponential; color: #2b1f14; density: 0.06" renderer="antialias: true; colorManagement: true;">
+
       <a-assets>
-        <a-asset-item id="modeloCueva" src="cueva_realista.glb"></a-asset-item>
-        
-        <img id="texturaPolvo" src="polvo.png">
-        
-        <img id="texMetal" src="https://cdn.aframe.io/examples/ar/moon-texture.jpg">
+        <img id="rugoso" src="https://cdn.aframe.io/examples/ar/moon-texture.jpg">
       </a-assets>
 
-      <a-entity gltf-model="#modeloCueva" position="0 -10 0" scale="2 2 2" material="roughness: 1; metalness: 0;"></a-entity>
-      <a-entity gltf-model="#modeloCueva" position="0 10 0" rotation="180 0 0" scale="2 2 2" material="roughness: 1; metalness: 0;"></a-entity>
-      <a-entity gltf-model="#modeloCueva" position="-10 0 0" rotation="0 90 0" scale="2 2 2" material="roughness: 1; metalness: 0;"></a-entity>
-      <a-entity gltf-model="#modeloCueva" position="10 0 0" rotation="0 -90 0" scale="2 2 2" material="roughness: 1; metalness: 0;"></a-entity>
+      <a-entity id="paredesCueva">
+        <a-torus radius="15" radius-tubular="8" segments-tubular="12" segments-radial="12" 
+                 material="src: #rugoso; color: #543b25; roughness: 1; metalness: 0; side: back" rotation="90 0 0"></a-torus>
+        <a-torus radius="15" radius-tubular="8" segments-tubular="12" segments-radial="12" 
+                 material="src: #rugoso; color: #402a18; roughness: 1; metalness: 0; side: back" rotation="0 90 0"></a-torus>
+      </a-entity>
 
-      <a-entity id="estacionCentral" position="0 0 0">
-        <a-sphere radius="2.5" material="color: #ffffff; opacity: 0.15; transparent: true; metalness: 0.8; roughness: 0.05; sphericalEnvMap: #texMetal;"></a-sphere>
+      <a-light type="ambient" color="#3a2312" intensity="0.5"></a-light>
+      <a-light type="directional" position="0 15 0" target="#nucleo" color="#ffd27f" intensity="2.5"></a-light>
+      <a-light type="point" position="0 -12 0" color="#ffffff" intensity="3" distance="25"></a-light>
+
+      <a-entity id="nucleo" position="0 0 0">
+        <a-sphere radius="2.5" material="color: #ffffff; opacity: 0.2; transparent: true; metalness: 0.9; roughness: 0.1"></a-sphere>
         
-        <a-entity id="microCiudad" scale="0.1 0.1 0.1" material="metalness: 0.8; roughness: 0.2;">
-          <a-box width="3" height="15" depth="3" color="#111" position="-2 7 0" material="metalness: 1; roughness: 0.1;"></a-box>
-          <a-box width="2" height="10" depth="2" color="#000" position="2 4 1" material="metalness: 1; roughness: 0.1;"></a-box>
-          <a-box width="5" height="5" depth="5" color="#222" position="0 2 0" material="metalness: 1; roughness: 0.1;"></a-box>
-          <a-cylinder radius="0.4" height="20" color="#111" position="0 10 0"></a-cylinder>
-
-          <a-light type="point" color="#ff4400" intensity="1.5" distance="10" position="0 10 0"></a-light>
+        <a-entity scale="0.1 0.1 0.1">
+          <a-box width="6" height="18" depth="6" color="#0a0a0a" position="-2.5 9 1" material="roughness: 0.5"></a-box>
+          <a-box width="4.5" height="14" depth="4.5" color="#141414" position="3 7 -2" material="roughness: 0.5"></a-box>
+          <a-cylinder radius="2.5" height="22" color="#050505" position="0 11 0" material="roughness: 0.3"></a-cylinder>
           
-          <a-text value="ZZZZ" color="#ffaa00" align="center" position="0 12 1.2" width="20" material="shader: flat; emissive: #ffaa00; emissiveIntensity: 2;"></a-text>
-          <a-text value="ZZZZ" color="#ffaa00" align="center" position="0 12 -1.2" width="20" rotation="0 180 0" material="shader: flat; emissive: #ffaa00; emissiveIntensity: 2;"></a-text>
+          <a-text value="ZZZZ" color="#ffcc00" align="center" position="0 14 3" width="25" material="shader: flat;"></a-text>
+          <a-text value="ZZZZ" color="#ffcc00" align="center" position="0 14 -3" width="25" rotation="0 180 0" material="shader: flat;"></a-text>
         </a-entity>
       </a-entity>
 
       <a-entity id="radiosMineros">
         <script>
           const numBrazos = 8;
-          const longitudBrazo = 14;
+          const longitudBrazo = 16;
           for (let i = 0; i < numBrazos; i++) {
             const angulo = (360 / numBrazos) * i;
             let brazoContainer = document.createElement('a-entity');
             brazoContainer.setAttribute('rotation', `${angulo} 90 0`);
             
-            // Estructura de celosía del brazo (más detallada)
-            let brazoEstructura = document.createElement('a-entity');
-            brazoEstructura.setAttribute('geometry', {primitive: 'box', width: 0.3, height: longitudBrazo, depth: 0.3});
-            brazoEstructura.setAttribute('position', `0 ${-longitudBrazo/2} 0`);
-            brazoEstructura.setAttribute('material', {color: '#1a1a1a', metalness: 0.9, roughness: 0.1, src: '#texMetal'});
-
-            // Soporte transversal
-            let soporteTransversal = document.createElement('a-entity');
-            soporteTransversal.setAttribute('geometry', {primitive: 'torus', radius: 1, radiusTubular: 0.05, arc: 360});
-            soporteTransversal.setAttribute('position', '0 -3 0');
-            soporteTransversal.setAttribute('rotation', '90 0 0');
-            soporteTransversal.setAttribute('material', {color: '#1a1a1a', metalness: 1, roughness: 0.2});
-            brazoEstructura.appendChild(soporteTransversal);
-
-            // Las luces amarillas del brazo (más realistas, con bloom-effect simulado)
-            let luzLarga = document.createElement('a-cylinder');
-            luzLarga.setAttribute('radius', 0.08);
-            luzLarga.setAttribute('height', longitudBrazo - 4);
-            luzLarga.setAttribute('material', {shader: 'flat', color: '#ffcc00', emissive: '#ffaa00', emissiveIntensity: 1});
-            luzLarga.setAttribute('position', `0 ${-longitudBrazo/2} 0`);
+            // Vigas de metal oscuro
+            let viga = document.createElement('a-box');
+            viga.setAttribute('width', 0.4); viga.setAttribute('height', longitudBrazo); viga.setAttribute('depth', 0.4);
+            viga.setAttribute('position', `0 ${-longitudBrazo/2} 0`);
+            viga.setAttribute('material', {color: '#1a1a1a', metalness: 0.8, roughness: 0.3});
             
-            // Luz puntual real que proyecta sombra
-            let luzPuntual = document.createElement('a-light');
-            luzPuntual.setAttribute('type', 'point');
-            luzPuntual.setAttribute('color', '#ffaa00');
-            luzPuntual.setAttribute('intensity', 0.5);
-            luzPuntual.setAttribute('distance', longitudBrazo);
-            luzPuntual.setAttribute('position', `0 ${-longitudBrazo/2} 0`);
+            // Neon amarillo central
+            let neon = document.createElement('a-cylinder');
+            neon.setAttribute('radius', 0.08); neon.setAttribute('height', longitudBrazo - 2);
+            neon.setAttribute('position', `0 ${-longitudBrazo/2} 0`);
+            neon.setAttribute('material', {shader: 'flat', color: '#ffaa00'});
 
-            // Los acentos rojos (horizontal)
+            // Placas rojas de advertencia en los brazos horizontales
             if (i === 2 || i === 6) {
-                let acentoRojo = document.createElement('a-box');
-                acentoRojo.setAttribute('width', 1.2); acentoRojo.setAttribute('height', 0.4); acentoRojo.setAttribute('depth', 0.4);
-                acentoRojo.setAttribute('material', {shader: 'flat', color: '#ff1111', emissive: '#ff1111', emissiveIntensity: 2}); acentoRojo.setAttribute('position', '0 -1.5 0');
-                brazoContainer.appendChild(acentoRojo);
+              let placaRoja = document.createElement('a-box');
+              placaRoja.setAttribute('width', 1.2); placaRoja.setAttribute('height', 0.5); placaRoja.setAttribute('depth', 0.5);
+              placaRoja.setAttribute('position', '0 -3 0');
+              placaRoja.setAttribute('material', {shader: 'flat', color: '#ff2222'});
+              brazoContainer.appendChild(placaRoja);
             }
 
-            brazoContainer.appendChild(brazoEstructura);
-            brazoContainer.appendChild(luzLarga);
-            brazoContainer.appendChild(luzPuntual);
-            
+            brazoContainer.appendChild(viga);
+            brazoContainer.appendChild(neon);
             document.querySelector('#radiosMineros').appendChild(brazoContainer);
           }
         </script>
       </a-entity>
 
-      <a-light type="ambient" color="#3d2c1c" intensity="0.5"></a-light>
-      <a-light type="point" position="0 -12 0" color="#fff7e0" intensity="2" distance="20" castShadow="true"></a-light>
-      
       <a-entity dust-particles></a-entity>
 
-      <a-entity id="rig" movement-controls="controls: gamepad, wasd; speed: 0.12" position="0 1.6 8">
-        <a-camera id="camera" look-controls>
-          <a-cursor fuse="true" timeout="1000" color="#fff" nav-cursor></a-cursor>
-        </a-camera>
+      <a-entity id="rig" movement-controls="controls: gamepad, wasd; speed: 0.15" position="0 0 9">
+        <a-camera id="camera" look-controls></a-camera>
         <a-entity oculus-touch-controls="hand: left"></a-entity>
         <a-entity oculus-touch-controls="hand: right"></a-entity>
       </a-entity>
